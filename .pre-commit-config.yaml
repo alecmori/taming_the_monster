@@ -1,0 +1,40 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  sha: v1.1.1
+  hooks:
+  - id: autopep8-wrapper
+    args:
+    - --in-place
+    - --aggressive
+  - id: check-added-large-files
+  - id: check-byte-order-marker
+  - id: check-docstring-first
+  - id: check-json
+  - id: check-yaml
+  - id: debug-statements
+    language_version: python3.6
+  - id: detect-private-key
+  - id: double-quote-string-fixer
+  - id: end-of-file-fixer
+  - id: fix-encoding-pragma
+  - id: flake8
+  - id: mixed-line-ending
+  - id: name-tests-test
+    files: ^mysite/tests.+\.py$
+  - id: requirements-txt-fixer
+  - id: trailing-whitespace
+- repo: https://github.com/asottile/add-trailing-comma
+  sha: v0.6.4
+  hooks:
+  - id: add-trailing-comma
+- repo: https://github.com/asottile/reorder_python_imports
+  sha: v0.3.5
+  hooks:
+  - id: reorder-python-imports
+    language_version: python3.6
+- repo: https://github.com/asottile/pyupgrade
+  sha: v1.2.0
+  hooks:
+  - id: pyupgrade
+    args:
+    - --py3-plus
