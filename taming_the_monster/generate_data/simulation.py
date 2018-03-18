@@ -4,9 +4,9 @@ import json
 import numpy
 import staticconf
 
-from taming_the_monster import model
-from taming_the_monster import policy
-from taming_the_monster import run_single_epoch
+from taming_the_monster.generate_data import model
+from taming_the_monster.generate_data import policy
+from taming_the_monster.generate_data import run_single_epoch
 
 CONFIG = 'default-config.yaml'
 
@@ -15,15 +15,14 @@ def main():
     """TODO DESCRIBE THIS
     """
     staticconf.YamlConfiguration(CONFIG)
-    if staticconf.read('generate_data.enabled'):
-        generate_biased_data(
-            policy=policy.get_policy(
-                complexity=staticconf.read('policy.complexity'),
-                num_features=staticconf.read('model.num_features'),
-                mean=staticconf.read('policy.mean'),
-                std=staticconf.read('policy.std'),
-            ),
-        )
+    generate_biased_data(
+        policy=policy.get_policy(
+            complexity=staticconf.read('generate_data.policy.complexity'),
+            num_features=staticconf.read('generate_data.num_features'),
+            mean=staticconf.read('generate_data.policy.mean'),
+            std=staticconf.read('generate_data.policy.std'),
+        ),
+    )
 
 
 def generate_biased_data(policy):
@@ -36,7 +35,7 @@ def generate_biased_data(policy):
             model=single_model,
             actual_policy=policy,
             num_actions=staticconf.read('generate_data.num_actions'),
-            num_features=staticconf.read('model.num_features'),
+            num_features=staticconf.read('generate_data.num_features'),
             num_examples=staticconf.read('generate_data.num_examples'),
         )
         epoch_history.append(epoch_info)
@@ -55,7 +54,7 @@ def _create_initial_model(policy):
     fake_data = numpy.random.random(
         (
             staticconf.read('generate_data.num_examples') * 5,
-            staticconf.read('model.num_features'),
+            staticconf.read('generate_data.num_features'),
         ),
     )
     return model.train_single_model(
