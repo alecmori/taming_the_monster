@@ -1,0 +1,21 @@
+contextual_bandit:
+    num_models: 25
+
+generate_data:
+    enabled: True
+    model_output: Null
+    num_actions: 5
+    num_epochs: 15
+    num_examples: 1000
+    output_file: 'taming_the_monster/data/generated_data'
+
+model:
+    num_features: 100
+
+policy:
+    complexity: 3
+    mean: 0
+    std: .1
+
+train_new_model:
+    num_layers: 4

@@ -1,4 +1,6 @@
 keras
 numpy
 pre-commit
+PyStaticConfiguration
 tensorflow
+theano
