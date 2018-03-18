@@ -7,7 +7,7 @@ venv:
 data: venv
 	mkdir taming_the_monster/data
 	touch taming_the_monster/data/generated_data
-	venv/bin/python taming_the_monster/simulation.py
+	venv/bin/python taming_the_monster/generate_data/simulation.py
 
 clean:
 	rm -rf venv

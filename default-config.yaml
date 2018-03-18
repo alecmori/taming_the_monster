@@ -6,16 +6,10 @@ generate_data:
     model_output: Null
     num_actions: 5
     num_epochs: 15
-    num_examples: 1000
+    num_examples: 2000
+    num_features: 300
     output_file: 'taming_the_monster/data/generated_data'
-
-model:
-    num_features: 100
-
-policy:
-    complexity: 3
-    mean: 0
-    std: .1
-
-train_new_model:
-    num_layers: 4
+    policy:
+        complexity: 3
+        mean: 0
+        std: .1

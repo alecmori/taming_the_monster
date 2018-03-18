@@ -58,9 +58,9 @@ def run_single_epoch(
     structured_data = fake_data.reshape(
         (num_examples, num_actions, num_features),
     )
-    structured_scores = actual_policy(X=fake_data).reshape(
+    structured_observations = actual_policy(X=fake_data).reshape(
         (num_examples, num_actions),
-    )
+    ) > numpy.random.random((num_examples, num_actions))
     return {
         'all_actions': structured_data.tolist(),
         'chosen_actions': numpy.array(
@@ -71,7 +71,14 @@ def run_single_epoch(
                 )
             ],
         ).tolist(),
-        'chosen_action_rewards': numpy.max(structured_scores, axis=1).tolist(),
+        'chosen_action_rewards': numpy.array(
+            [
+                1 if structured_observations[i, chosen_index] else 0
+                for i, chosen_index in enumerate(
+                    numpy.argmax(scored_actions, axis=1),
+                )
+            ],
+        ).tolist(),
     }
 
 
