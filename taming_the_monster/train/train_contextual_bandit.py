@@ -12,14 +12,15 @@ CONFIG = 'default-config.yaml'
 def main():
     staticconf.YamlConfiguration(CONFIG)
     contextual_bandit = []
-    for training_data in data_iterator.iterate_data():
+    for epoch, training_data in enumerate(data_iterator.iterate_data()):
         new_model = model.train_model(
             X=training_data['chosen_actions'],
             Y=training_data['rewards'],
-            weights=inverse_propensity_weighting(
+            weights=inverse_propensity_weighting.get_modified_weights(
                 possible_actions=training_data['possible_actions'],
                 chosen_actions=training_data['chosen_actions'],
                 contextual_bandit=contextual_bandit,
+                epoch=epoch,
             ),
         )
         contextual_bandit = contextual_bandit_utils.add_model(

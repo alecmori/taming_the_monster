@@ -1,4 +1,5 @@
-contextual_bandit:
+train_contextual_bandit:
+    failure_probability: 0.05
     num_models: 25
 
 generate_data:
