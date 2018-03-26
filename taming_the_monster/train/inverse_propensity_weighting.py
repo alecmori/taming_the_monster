@@ -18,7 +18,7 @@ def get_weights(
         ),
     )
     return numpy.array(
-        max(
+        1. / max(
             min_prob,
             _get_prob_of_choosing(
                 action_list=action_list,

@@ -1,6 +1,9 @@
 keras
+mock
 numpy
 pre-commit
 PyStaticConfiguration
+pytest
 tensorflow
 theano
+tox
