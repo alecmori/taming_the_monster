@@ -39,7 +39,13 @@ def add_model(
             contextual_bandit=contextual_bandit + [
                 {
                     'expected_reward': expected_reward,
-                    'probability': 0.0,
+                    'probability': _get_new_model_probability(
+                        V=variance_coefficients['V'],
+                        S=variance_coefficients['S'],
+                        D=variance_coefficients['D'],
+                        possible_actions=possible_actions,
+                        min_probs=min_probs,
+                    ),
                     'model': '',
                 },
             ],
@@ -98,11 +104,15 @@ def _get_variance_coefficients(
         'V': average_variance,
         'S': numpy.average(numpy.power(model_variances, 2)),
         'D': average_variance - (
-            scaled_regret + numpy.average(
-                [len(actions) for actions in possible_actions],
-            )
+            scaled_regret +
+            _get_num_actions(possible_actions=possible_actions)
         ),
     }
+
+
+def _get_num_actions(possible_actions):
+    """TODO"""
+    return numpy.average([len(actions) for actions in possible_actions])
 
 
 def _get_model_variances(
@@ -141,3 +151,19 @@ def _rescale_probability(contextual_bandit):
         }
         for policy in contextual_bandit
     ]
+
+
+def _get_new_model_probability(V, S, D, possible_actions, min_probs):
+    """TODO"""
+    numerator = V + D
+    denominator = 2 * (
+        1 - _get_num_actions(
+            possible_actions=possible_actions,
+        ) * _get_min_prob(min_probs=min_probs),
+    ) * S
+    return numerator / denominator
+
+
+def _get_min_prob(min_probs):
+    """TODO"""
+    return numpy.average(min_probs)
