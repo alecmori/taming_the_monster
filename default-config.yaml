@@ -1,5 +1,5 @@
-train:
-    failure_probability: 0.05
+train_contextual_bandit:
+    failure_probability: 0.001
     num_models: 25
 
 generate_data:
@@ -11,6 +11,6 @@ generate_data:
     num_features: 300
     output_file: 'taming_the_monster/data/generated_data'
     policy:
-        complexity: 3
+        complexity: 500
         mean: 0
         std: .1

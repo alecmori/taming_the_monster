@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import staticconf
 
-from taming_the_monster import contextual_bandit_utils
-from taming_the_monster import data_iterator
-from taming_the_monster import inverse_propensity_weighting
-from taming_the_monster import model_utils
+from taming_the_monster.train import contextual_bandit_utils
+from taming_the_monster.train import data_iterator
+from taming_the_monster.train import inverse_propensity_weighting
+from taming_the_monster.train import model_utils
 
 CONFIG = 'default-config.yaml'
 

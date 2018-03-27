@@ -22,8 +22,10 @@ def add_model(
     )
     scaled_regret = _get_scaled_regret(
         expected_regret=max(
-            policy['expected_reward'] - expected_reward
-            for policy in contextual_bandit
+            [
+                policy['expected_reward'] - expected_reward
+                for policy in contextual_bandit
+            ] + [0],
         ),
         min_probs=min_probs,
     )
@@ -67,7 +69,6 @@ def _get_expected_reward(
     chosen_actions, Y, weights,
 ):
     """TODO"""
-    num_examples, _, _ = possible_actions.shape
     return numpy.sum(
         reward * weight
         for model_choice, actions, chosen_action, reward, weight in zip(
@@ -75,10 +76,10 @@ def _get_expected_reward(
             possible_actions,
             chosen_actions,
             Y,
-            weights,
+            list(weights),
         )
-        if actions[model_choices] == chosen_action
-    ) / num_examples
+        if numpy.array_equal(actions[model_choices], chosen_action)
+    ) / len(possible_actions)
 
 
 def _get_scaled_regret(expected_regret, min_probs):
@@ -156,11 +157,9 @@ def _rescale_probability(contextual_bandit):
 def _get_new_model_probability(V, S, D, possible_actions, min_probs):
     """TODO"""
     numerator = V + D
-    denominator = 2 * (
-        1 - _get_num_actions(
-            possible_actions=possible_actions,
-        ) * _get_min_prob(min_probs=min_probs),
-    ) * S
+    num_actions = _get_num_actions(possible_actions=possible_actions)
+    denominator = 2. * (1. - num_actions *
+                        _get_min_prob(min_probs=min_probs)) * S
     return numerator / denominator
 
 

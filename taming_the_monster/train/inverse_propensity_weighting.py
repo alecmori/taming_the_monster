@@ -5,7 +5,7 @@ import staticconf
 from taming_the_monster.train import model_utils
 
 
-def get_propesnity_info(
+def get_propensity_info(
         possible_actions, chosen_actions, contextual_bandit, epoch,
 ):
     """TODO"""
@@ -18,7 +18,7 @@ def get_propesnity_info(
         ),
     )
     return {
-        'weights': numpy.array(
+        'weights': [
             1. / max(
                 min_prob,
                 _get_prob_of_choosing(
@@ -29,7 +29,7 @@ def get_propesnity_info(
             )
             for action_list, chosen_action, min_prob
             in zip(possible_actions, chosen_actions, minimum_probs)
-        ),
+        ],
         'min_probs': minimum_probs,
     }
 
@@ -57,9 +57,7 @@ def _get_min_prob(
 
 def _get_prob_of_choosing(action_list, chosen_action, contextual_bandit):
     """TODO"""
-    chosen_action_index = next(
-        numpy.where(action_list == chosen_action),
-    )
+    chosen_action_index = numpy.where(action_list == chosen_action)[0][0]
     return sum(
         policy['probability']
         for policy in contextual_bandit
