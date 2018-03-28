@@ -3,11 +3,11 @@ import numpy
 import staticconf
 
 from taming_the_monster.train import contextual_bandit_utils
-from taming_the_monster.train import model_utils
 
 
 def get_propensity_info(
         possible_actions, chosen_actions, contextual_bandit, epoch,
+        score_actions,
 ):
     """TODO"""
     minimum_probs = _get_min_prob(
@@ -26,6 +26,7 @@ def get_propensity_info(
                     action_list=action_list,
                     chosen_action=chosen_action,
                     contextual_bandit=contextual_bandit,
+                    score_actions=score_actions,
                 ),
             )
             for action_list, chosen_action, min_prob
@@ -56,7 +57,9 @@ def _get_min_prob(
     ]
 
 
-def _get_prob_of_choosing(action_list, chosen_action, contextual_bandit):
+def _get_prob_of_choosing(
+        action_list, chosen_action, contextual_bandit, score_actions,
+):
     """TODO"""
     chosen_action_index = contextual_bandit_utils.get_chosen_action_index(
         actions=action_list,
@@ -66,6 +69,6 @@ def _get_prob_of_choosing(action_list, chosen_action, contextual_bandit):
         policy['probability']
         for policy in contextual_bandit
         if numpy.argmax(
-            model_utils.score_actions(X=action_list, model=policy['model']),
+            score_actions(X=action_list, model=policy['model']),
         ) == chosen_action_index
     )

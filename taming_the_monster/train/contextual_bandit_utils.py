@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 import numpy
 
-from taming_the_monster.train import model_utils
-
 
 def add_model(
     model, contextual_bandit, possible_actions, chosen_actions, Y, weights,
-    min_probs,
+    min_probs, score_actions,
 ):
     """TODO"""
     model_choices = _get_model_choices(
         model=model,
         possible_actions=possible_actions,
+        score_actions=score_actions,
     )
     expected_reward = _get_expected_reward(
         model_choices=model_choices,
@@ -35,6 +34,7 @@ def add_model(
         scaled_regret=scaled_regret,
         min_probs=min_probs,
         model_choices=model_choices,
+        score_actions=score_actions,
     )
     if variance_coefficients['D'] > 0:
         return _rescale_probability(
@@ -48,7 +48,7 @@ def add_model(
                         possible_actions=possible_actions,
                         min_probs=min_probs,
                     ),
-                    'model': '',
+                    'model': model,
                 },
             ],
         )
@@ -56,10 +56,10 @@ def add_model(
         return contextual_bandit
 
 
-def _get_model_choices(model, possible_actions):
+def _get_model_choices(model, possible_actions, score_actions):
     """TODO"""
     return [
-        numpy.argmax(model_utils.score_actions(X=actions, model=model))
+        numpy.argmax(score_actions(X=actions, model=model))
         for actions in possible_actions
     ]
 
@@ -98,7 +98,7 @@ def _get_scaled_regret(expected_regret, min_probs):
 
 def _get_variance_coefficients(
     contextual_bandit, possible_actions, scaled_regret, min_probs,
-    model_choices,
+    model_choices, score_actions,
 ):
     """TODO"""
     model_variances = _get_model_variances(
@@ -106,6 +106,7 @@ def _get_variance_coefficients(
         model_choices=model_choices,
         possible_actions=possible_actions,
         min_probs=min_probs,
+        score_actions=score_actions,
     )
     average_variance = numpy.average(model_variances)
     return {
@@ -125,6 +126,7 @@ def _get_num_actions(possible_actions):
 
 def _get_model_variances(
     contextual_bandit, model_choices, possible_actions, min_probs,
+    score_actions,
 ):
     """TODO"""
     return [
@@ -136,7 +138,7 @@ def _get_model_variances(
                     model_choices,
                 )
                 if numpy.argmax(
-                    model_utils.score_actions(
+                    score_actions(
                         X=actions,
                         model=policy['model'],
                     ),
