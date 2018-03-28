@@ -11,9 +11,11 @@ CONFIG = 'default-config.yaml'
 
 
 def train_contextual_bandit(iterate_data, train_model, score_actions):
+    """TODO"""
     staticconf.YamlConfiguration(CONFIG)
     contextual_bandit = []
     for epoch, training_data in enumerate(iterate_data()):
+        _validate_training_data(training_data=training_data, epoch=epoch)
         propensity_info = inverse_propensity_weighting.get_propensity_info(
             possible_actions=training_data['possible_actions'],
             chosen_actions=training_data['chosen_actions'],
@@ -37,6 +39,25 @@ def train_contextual_bandit(iterate_data, train_model, score_actions):
             score_actions=score_actions,
         )
     return contextual_bandit
+
+
+def _validate_training_data(training_data, epoch):
+    """TODO"""
+    if set(
+        training_data.keys(),
+    ) != {'possible_actions', 'chosen_actions', 'rewards'}:
+        raise ValueError(
+            'On epoch {epoch}, data did not have proper keys (expected '
+            '"possible_actions" (all distinct choices we could have chosen), '
+            '"chosen_actions" (the actual choice observed), and "rewards" '
+            '(the benefit associated with the chosen action).'
+            '\n'
+            '"possible_actions" should be a list of scorable feature arrays, '
+            '"chosen_actions" should be a scorable feature array, '
+            '"rewards" should be a vector of values.'
+            '\n'
+            'You might want to modify your `iterate_data` function.',
+        )
 
 
 if __name__ == '__main__':
