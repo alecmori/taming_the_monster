@@ -33,6 +33,7 @@ def main():
             weights=propensity_info['weights'],
             min_probs=propensity_info['min_probs'],
         )
+    print(contextual_bandit)
     # TODO: Save contextual bandit here
 
 

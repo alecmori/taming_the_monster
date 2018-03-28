@@ -65,8 +65,7 @@ def _get_model_choices(model, possible_actions):
 
 
 def _get_expected_reward(
-    model_choices, possible_actions,
-    chosen_actions, Y, weights,
+    model_choices, possible_actions, chosen_actions, Y, weights,
 ):
     """TODO"""
     return numpy.sum(
@@ -78,8 +77,16 @@ def _get_expected_reward(
             Y,
             list(weights),
         )
-        if numpy.array_equal(actions[model_choices], chosen_action)
+        if get_chosen_action_index(
+            actions=actions,
+            chosen_action=chosen_action,
+        ) == model_choice
     ) / len(possible_actions)
+
+
+def get_chosen_action_index(actions, chosen_action):
+    """TODO"""
+    return numpy.where(actions == chosen_action)[0][0]
 
 
 def _get_scaled_regret(expected_regret, min_probs):

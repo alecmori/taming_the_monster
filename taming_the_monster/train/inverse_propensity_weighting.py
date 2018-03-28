@@ -2,6 +2,7 @@
 import numpy
 import staticconf
 
+from taming_the_monster.train import contextual_bandit_utils
 from taming_the_monster.train import model_utils
 
 
@@ -57,7 +58,10 @@ def _get_min_prob(
 
 def _get_prob_of_choosing(action_list, chosen_action, contextual_bandit):
     """TODO"""
-    chosen_action_index = numpy.where(action_list == chosen_action)[0][0]
+    chosen_action_index = contextual_bandit_utils.get_chosen_action_index(
+        actions=action_list,
+        chosen_action=chosen_action,
+    )
     return sum(
         policy['probability']
         for policy in contextual_bandit
