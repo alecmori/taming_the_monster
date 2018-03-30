@@ -1,7 +1,3 @@
-train_contextual_bandit:
-    failure_probability: 0.001
-    num_models: 25
-
 generate_data:
     enabled: True
     model_output: Null

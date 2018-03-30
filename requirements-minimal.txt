@@ -1,9 +1,13 @@
+flake8
 keras
 mock
 numpy
 pre-commit
 PyStaticConfiguration
 pytest
+pytest-cov
+pytest-sugar
+pytest-xdist
 tensorflow
 theano
 tox

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy
-import staticconf
 
 from taming_the_monster.train import contextual_bandit_utils
+
+
+FAILURE_PROB = 0.01
 
 
 def get_propensity_info(
@@ -14,9 +16,7 @@ def get_propensity_info(
         possible_actions=possible_actions,
         contextual_bandit=contextual_bandit,
         epoch=epoch,
-        failure_prob=staticconf.read(
-            'train_contextual_bandit.failure_probability',
-        ),
+        failure_prob=FAILURE_PROB,
     )
     return {
         'weights': [
