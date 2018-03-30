@@ -6,7 +6,38 @@ def add_model(
     model, contextual_bandit, possible_actions, chosen_actions, Y, weights,
     min_probs, score_actions,
 ):
-    """TODO"""
+    """Determines whether or not the new model is added to the bandit.
+
+    Implementation of Algorithm 2 (Section 3.2) from the 'Taming the
+    Monster' paper. Essentially, it checks whether or not the newly
+    trained model picks the same things as the other models in your
+    contextual bandit.
+    If it does agree with the models in your ensemble, don't add this
+    new model in - it adds nothing of value.
+    If it doesn't, add it into your ensemble - it is capturing
+    something different than all your current models and should be
+    emphasized.
+
+    :param model:
+    :type model:
+    :param contextual_bandit:
+    :type contextual_bandit:
+    :param possible_actions:
+    :type possible_actions:
+    :param chosen_actions:
+    :type chosen_actions:
+    :param Y:
+    :type Y:
+    :param weights:
+    :type weights:
+    :param min_probs:
+    :type min_probs:
+    :param score_actions:
+    :type score_actions: func
+
+    :returns:
+    :rtype:
+    """
     model_choices = _get_model_choices(
         model=model,
         possible_actions=possible_actions,
@@ -24,8 +55,8 @@ def add_model(
             [
                 policy['expected_reward'] - expected_reward
                 for policy in contextual_bandit
-            ] + [0],
-        ),
+            ],
+        ) if contextual_bandit else 0,
         min_probs=min_probs,
     )
     variance_coefficients = _get_variance_coefficients(

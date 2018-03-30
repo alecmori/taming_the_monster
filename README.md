@@ -1,11 +1,5 @@
 The purpose of this repo is to provide a template of anyone wishing to evaluate contextual bandit systems. It provides three functions: **Data Generation**, **Training**, and **Evaluation**.
 
-Generate Data
-=============
-This part of the repo can be found at [taming_the_monster/generate_data](https://github.com/alecmori/taming_the_monster/tree/master/taming_the_monster/generate_data) as well as the [default-config.yaml](https://github.com/alecmori/taming_the_monster/blob/master/default-config.yaml#L4) file.
-If you do not have your own data to play with, you can generate your own data using the command `make data` (or run the commands found in the [Makefile](https://github.com/alecmori/taming_the_monster/blob/master/Makefile)).
-Descriptions of what each module does can be found in the docstrings.
-
 Training
 ========
 The part of the repo can be found at [taming_the_monster/train](https://github.com/alecmori/taming_the_monster/tree/master/taming_the_monster/train).

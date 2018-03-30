@@ -11,7 +11,18 @@ CONFIG = 'default-config.yaml'
 
 
 def train_contextual_bandit(iterate_data, train_model, score_actions):
-    """TODO"""
+    """
+    :param iterate_data:
+    :type iterate_data: function
+    :param train_model:
+    :type train_model: function
+    :param score_actions:
+    :type score_actions: function
+
+    :returns: The contextual bandit, which is a list of the models and
+        probablities you choose them with.
+    :rtype: list
+    """
     staticconf.YamlConfiguration(CONFIG)
     contextual_bandit = []
     for epoch, training_data in enumerate(iterate_data()):
