@@ -1,0 +1,7 @@
+.cache
+.coverage
+.py[co]
+.tox
+__pycache__
+venv
+venv_test
