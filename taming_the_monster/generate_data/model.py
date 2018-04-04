@@ -2,8 +2,8 @@
 import keras
 
 
-def train_model(X, Y, weights):
-    """TODO: Fill this shit out
+def train_single_model(X, Y):
+    """TODO DESCRIBE THIS
     """
     _, num_features = X.shape
     model = keras.models.Sequential()
@@ -19,11 +19,5 @@ def train_model(X, Y, weights):
         loss='binary_crossentropy',
         metrics=['accuracy'],
     )
-    model.fit(x=X, y=Y, sample_weight=weights, epochs=25)
+    model.fit(x=X, y=Y, epochs=5)
     return model
-
-
-def score_actions(X, model):
-    """TODO: Fill this shit out
-    """
-    return model.predict(x=X)

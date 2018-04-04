@@ -8,7 +8,7 @@ def iterate_data():
     """Yields numpy iterator
     """
     # Yield for each epoch
-    for row in open('taming_the_monster/data/generated_data'):
+    for row in open('data/train_data'):
         d = json.loads(row)
         yield {
             # Shape = (num_examples, num_actions_possible, num_features)

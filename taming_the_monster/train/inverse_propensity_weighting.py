@@ -9,7 +9,7 @@ FAILURE_PROB = 0.01
 
 def get_propensity_info(
         possible_actions, chosen_actions, contextual_bandit, epoch,
-        score_actions,
+        score_actions, rewards,
 ):
     """TODO"""
     minimum_probs = _get_min_prob(

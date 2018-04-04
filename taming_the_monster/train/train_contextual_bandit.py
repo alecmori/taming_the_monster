@@ -33,6 +33,7 @@ def train_contextual_bandit(iterate_data, train_model, score_actions):
             contextual_bandit=contextual_bandit,
             epoch=epoch,
             score_actions=score_actions,
+            rewards=training_data['rewards'],
         )
         model = train_model(
             X=numpy.array(training_data['chosen_actions']),

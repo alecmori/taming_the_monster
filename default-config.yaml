@@ -1,11 +1,11 @@
 generate_data:
     enabled: True
     model_output: Null
-    num_actions: 5
-    num_epochs: 15
-    num_examples: 2000
+    num_actions: 3
+    num_epochs: 21
+    num_examples: 10000
     num_features: 300
-    output_file: 'taming_the_monster/data/generated_data'
+    output_file: 'data/generated_data'
     policy:
         complexity: 500
         mean: 0
