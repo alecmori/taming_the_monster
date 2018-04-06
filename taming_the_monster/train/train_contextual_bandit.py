@@ -38,7 +38,9 @@ def train_contextual_bandit(iterate_data, train_model, score_actions):
         model = train_model(
             X=numpy.array(training_data['chosen_actions']),
             Y=numpy.array(training_data['rewards']),
-            weights=numpy.array(propensity_info['weights']),
+            weighted_rewards=numpy.array(
+                propensity_info['weighted_rewards'],
+            ),
         )
         contextual_bandit = contextual_bandit_utils.add_model(
             model=model,
@@ -46,7 +48,6 @@ def train_contextual_bandit(iterate_data, train_model, score_actions):
             possible_actions=training_data['possible_actions'],
             chosen_actions=training_data['chosen_actions'],
             Y=training_data['rewards'],
-            weights=propensity_info['weights'],
             min_probs=propensity_info['min_probs'],
             score_actions=score_actions,
         )

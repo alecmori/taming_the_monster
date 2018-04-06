@@ -3,8 +3,8 @@ import numpy
 
 
 def add_model(
-    model, contextual_bandit, possible_actions, chosen_actions, Y, weights,
-    min_probs, score_actions,
+    model, contextual_bandit, possible_actions, chosen_actions, Y, min_probs,
+    score_actions,
 ):
     """Determines whether or not the new model is added to the bandit.
 
@@ -48,7 +48,6 @@ def add_model(
         possible_actions=possible_actions,
         chosen_actions=chosen_actions,
         Y=Y,
-        weights=weights,
     )
     scaled_regret = _get_scaled_regret(
         expected_regret=max(
@@ -95,18 +94,15 @@ def _get_model_choices(model, possible_actions, score_actions):
     ]
 
 
-def _get_expected_reward(
-    model_choices, possible_actions, chosen_actions, Y, weights,
-):
+def _get_expected_reward(model_choices, possible_actions, chosen_actions, Y):
     """TODO"""
     return numpy.sum(
-        reward * weight
-        for model_choice, actions, chosen_action, reward, weight in zip(
+        reward
+        for model_choice, actions, chosen_action, reward in zip(
             model_choices,
             possible_actions,
             chosen_actions,
             Y,
-            list(weights),
         )
         if get_chosen_action_index(
             actions=actions,

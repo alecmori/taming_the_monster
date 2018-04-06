@@ -19,8 +19,8 @@ def get_propensity_info(
         failure_prob=FAILURE_PROB,
     )
     return {
-        'weights': [
-            1. / max(
+        'weighted_rewards': [
+            reward / max(
                 min_prob,
                 _get_prob_of_choosing(
                     action_list=action_list,
@@ -29,8 +29,8 @@ def get_propensity_info(
                     score_actions=score_actions,
                 ),
             )
-            for action_list, chosen_action, min_prob
-            in zip(possible_actions, chosen_actions, minimum_probs)
+            for action_list, chosen_action, min_prob, reward
+            in zip(possible_actions, chosen_actions, minimum_probs, rewards)
         ],
         'min_probs': minimum_probs,
     }
