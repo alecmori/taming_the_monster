@@ -11,7 +11,10 @@ def get_propensity_info(
         possible_actions, chosen_actions, contextual_bandit, epoch,
         score_actions, rewards,
 ):
-    """TODO"""
+    """Gets the reweighted rewards that a policy can learn
+
+    For further reading, read Algorithm 1 from `Taming the Monster`.
+    """
     minimum_probs = _get_min_prob(
         possible_actions=possible_actions,
         contextual_bandit=contextual_bandit,
@@ -19,19 +22,26 @@ def get_propensity_info(
         failure_prob=FAILURE_PROB,
     )
     return {
-        'weighted_rewards': [
-            reward / max(
-                min_prob,
-                _get_prob_of_choosing(
-                    action_list=action_list,
-                    chosen_action=chosen_action,
-                    contextual_bandit=contextual_bandit,
-                    score_actions=score_actions,
-                ),
-            )
-            for action_list, chosen_action, min_prob, reward
-            in zip(possible_actions, chosen_actions, minimum_probs, rewards)
-        ],
+        'weighted_rewards': _normalize(
+            rewards=[
+                reward / max(
+                    min_prob,
+                    _get_prob_of_choosing(
+                        action_list=action_list,
+                        chosen_action=chosen_action,
+                        contextual_bandit=contextual_bandit,
+                        score_actions=score_actions,
+                    ),
+                )
+                for action_list, chosen_action, min_prob, reward
+                in zip(
+                    possible_actions,
+                    chosen_actions,
+                    minimum_probs,
+                    rewards,
+                )
+            ],
+        ),
         'min_probs': minimum_probs,
     }
 
@@ -39,8 +49,29 @@ def get_propensity_info(
 def _get_min_prob(
         possible_actions, contextual_bandit, epoch, failure_prob,
 ):
-    """TODO
-    as defined Algorithm 1
+    """Definition of minimum probabilty from `Taming the Monster`
+
+    For further reading, read Algorithm 1 (specifically the part about
+    minimum probability) from `Taming the Monster`.
+
+    :param possible_actions: For each training example, a list of all
+        possible feature vectors that were considered for before
+        choosing to show one.
+    :type possible_actions: list (of feature vectors)
+    :param contextual_bandit: The contextual bandit that has been
+        trained thus far.
+    :type contextual_bandit: list (of dicts)
+    :param epoch: A monotone increasing value representing which epoch
+        we are in.
+    :type epoch: int
+    :param failure_prob: The probability of "failure"; similar to
+        willingness to explore.
+    :type failure_prob: float
+
+    :returns: A list of the minimum possible probabilities per training
+        example; used in weighting the "new" reward.
+    :rtype: list (of floats)
+
     """
     return [
         min(
@@ -72,3 +103,8 @@ def _get_prob_of_choosing(
             score_actions(X=action_list, model=policy['model']),
         ) == chosen_action_index
     )
+
+
+def _normalize(rewards):
+    """TODO"""
+    return [reward / max(rewards) for reward in rewards]

@@ -24,7 +24,7 @@ def train_model(X, Y, weighted_rewards):
         loss='mean_squared_error',
         metrics=['accuracy'],
     )
-    model.fit(x=X, y=weighted_rewards, epochs=250)
+    model.fit(x=X, y=weighted_rewards, epochs=100)
     return model
 
 
