@@ -21,7 +21,7 @@ def train_model(X, Y, weighted_rewards):
     )
     model.compile(
         optimizer='adam',
-        loss='mean_squared_error',
+        loss='logcosh',
         metrics=['accuracy'],
     )
     model.fit(x=X, y=weighted_rewards, epochs=100)

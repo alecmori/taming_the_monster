@@ -2,6 +2,7 @@
 import mock
 import pytest
 
+from taming_the_monster.train import contextual_bandit_utils
 from taming_the_monster.train import inverse_propensity_weighting
 
 
@@ -250,3 +251,47 @@ class TestGetMinProb(object):
         )
         # Then we should get <expected>
         assert result == expected
+
+
+def TestGetProbOfChoosing(object):
+
+    @pytest.fixture
+    def patch_get_chosen_action_index(self):
+        with mock.patch.object(
+            contextual_bandit_utils,
+            'get_chosen_action_index',
+            autospec=True,
+        ) as mock_instance:
+            yield mock_instance
+
+    def _call(self, **kwargs):
+        params = {
+            'action_list': mock.sentinel.action_list,
+            'chosen_action': mock.sentinel.chosen_action,
+            'contextual_bandit': mock.sentinel.contextual_bandit,
+            'score_actions': mock.sentinel.score_actions,
+        }
+        params.update(kwargs)
+        return inverse_propensity_weighting.normalize(**params)
+
+
+def TestNormalize(object):
+
+    def _call(self, **kwargs):
+        params = {'rewards': mock.sentinel.rewards}
+        params.update(kwargs)
+        return inverse_propensity_weighting._get_prob_of_choosing(**params)
+
+    @pytest.mark.parametrize(
+        argnames=['rewards', 'expected'],
+        argvalues=[
+            ([0., 1., 0.5], [0., 1., 0.5]),
+            ([0., 4., 0.2], [0., 1., 0.05]),
+        ],
+        ids=['normalize_with_one', 'normalize_with_greater_than_one'],
+    )
+    def test_normalize(self, rewards, expected):
+        # When we normalize <rewards>
+        results = self._call(rewards=rewards)
+        # Then we expect <expected>
+        assert results == expected

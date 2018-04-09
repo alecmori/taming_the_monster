@@ -14,6 +14,31 @@ def get_propensity_info(
     """Gets the reweighted rewards that a policy can learn
 
     For further reading, read Algorithm 1 from `Taming the Monster`.
+
+    :param possible_actions: For each training example, a list of all
+        possible feature vectors that were considered for before
+        choosing to show one.
+    :type possible_actions: list (of list of feature vectors)
+    :param chosen_actions: The observed actions; must be one of the
+        `possible_actions`.
+    :type chosen_actions:
+    :param contextual_bandit: The contextual bandit that has been
+        trained thus far.
+    :type contextual_bandit: list (of dicts)
+    :param epoch: A monotone increasing value representing which epoch
+        we are in.
+    :type epoch: int
+    :param score_actions: A user-provided function that will score a
+        bunch of user-provided features given a model and a feature
+        matrix.
+    :type score_actions: func
+    :param rewards: Given the list of chosen actions, one the observed
+        rewrad for each.
+    :type rewards: list (of floats)
+
+    :returns: Both the minimum probabilities per action and the
+        new weighted rewards.
+    :rtype: dict
     """
     minimum_probs = _get_min_prob(
         possible_actions=possible_actions,
@@ -57,7 +82,7 @@ def _get_min_prob(
     :param possible_actions: For each training example, a list of all
         possible feature vectors that were considered for before
         choosing to show one.
-    :type possible_actions: list (of feature vectors)
+    :type possible_actions: list (of list of feature vectors)
     :param contextual_bandit: The contextual bandit that has been
         trained thus far.
     :type contextual_bandit: list (of dicts)
@@ -91,7 +116,28 @@ def _get_min_prob(
 def _get_prob_of_choosing(
         action_list, chosen_action, contextual_bandit, score_actions,
 ):
-    """TODO"""
+    """Gets the actual probability of being chosen by the bandit
+
+    For further reading, read Algorithm 1 from `Taming the Monster`.
+
+    :param action_list: A list of all possible feature vectors that
+        were considered for before choosing to show one.
+    :type possible_actions: list (of feature vectors)
+    :param chosen_action: The observed action; must be one of the
+        `possible_actions`.
+    :type chosen_actions: feature vector (given by user)
+    :param contextual_bandit: The contextual bandit that has been
+        trained thus far.
+    :type contextual_bandit: list (of dicts)
+    :param score_actions: A user-provided function that will score a
+        bunch of user-provided features given a model and a feature
+        matrix.
+    :type score_actions: func
+
+    :returns: The probability the `chosen_action` has of being picked
+        by the contextual bandit.
+    :rtype: float
+    """
     chosen_action_index = contextual_bandit_utils.get_chosen_action_index(
         actions=action_list,
         chosen_action=chosen_action,
@@ -106,5 +152,14 @@ def _get_prob_of_choosing(
 
 
 def _normalize(rewards):
-    """TODO"""
+    """Normalize the weighted rewards between 0 and 1 for training
+
+    :param rewards: The rewards after being weighted by their
+        propensities.
+    :type rewards: list (of floats)
+
+    :returns: The rewards still proportionally the same, but bounded
+        between 0 and 1 (inclusive).
+    :rtype: list (of floats)
+    """
     return [reward / max(rewards) for reward in rewards]
