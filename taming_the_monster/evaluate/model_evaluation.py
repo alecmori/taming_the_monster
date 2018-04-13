@@ -8,6 +8,9 @@ from taming_the_monster.train import model_utils
 def evaluate_contextual_bandit(contextual_bandit, data):
     """Algo 2 from the paper"""
     print(len(contextual_bandit))
+    unbiased_reward = float(
+        sum(data['rewards']),
+    ) / len(data['rewards'])
     average_observed_reward = 0
     num_observed_values = 0
     for possible_actions, observed_action, reward in zip(
@@ -22,7 +25,10 @@ def evaluate_contextual_bandit(contextual_bandit, data):
         )
         num_observed_values += p
         average_observed_reward += p * reward
-    return average_observed_reward / num_observed_values
+    return (
+        average_observed_reward / num_observed_values -
+        unbiased_reward
+    ) / unbiased_reward
 
 
 def _get_probability_of_choosing(

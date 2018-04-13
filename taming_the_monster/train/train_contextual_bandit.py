@@ -47,7 +47,7 @@ def train_contextual_bandit(iterate_data, train_model, score_actions):
             contextual_bandit=contextual_bandit,
             possible_actions=training_data['possible_actions'],
             chosen_actions=training_data['chosen_actions'],
-            Y=training_data['rewards'],
+            weighted_rewards=propensity_info['weighted_rewards'],
             min_probs=propensity_info['min_probs'],
             score_actions=score_actions,
         )

@@ -272,7 +272,7 @@ def TestGetProbOfChoosing(object):
             'score_actions': mock.sentinel.score_actions,
         }
         params.update(kwargs)
-        return inverse_propensity_weighting.normalize(**params)
+        return inverse_propensity_weighting._get_prob_of_choosing(**params)
 
 
 def TestNormalize(object):
@@ -280,7 +280,7 @@ def TestNormalize(object):
     def _call(self, **kwargs):
         params = {'rewards': mock.sentinel.rewards}
         params.update(kwargs)
-        return inverse_propensity_weighting._get_prob_of_choosing(**params)
+        return inverse_propensity_weighting.normalize(**params)
 
     @pytest.mark.parametrize(
         argnames=['rewards', 'expected'],

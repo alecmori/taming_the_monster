@@ -1,34 +1,16 @@
 # -*- coding: utf-8 -*-
-import keras
+from sklearn import linear_model
 
 
 def train_model(X, Y, weighted_rewards):
     """TODO: Fill this shit out
     """
-    _, num_features = X.shape
-    model = keras.models.Sequential()
-    model.add(
-        keras.layers.Dense(
-            units=50,
-            activation='sigmoid',
-            input_shape=(num_features,),
-        ),
-    )
-    model.add(
-        keras.layers.Dense(
-            units=1,
-        ),
-    )
-    model.compile(
-        optimizer='adam',
-        loss='logcosh',
-        metrics=['accuracy'],
-    )
-    model.fit(x=X, y=weighted_rewards, epochs=100)
+    model = linear_model.LinearRegression()
+    model.fit(X=X, y=weighted_rewards)
     return model
 
 
 def score_actions(X, model):
     """TODO: Fill this shit out
     """
-    return model.predict(x=X)
+    return model.predict(X=X)

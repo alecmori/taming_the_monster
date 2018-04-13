@@ -3,8 +3,8 @@ import numpy
 
 
 def add_model(
-    model, contextual_bandit, possible_actions, chosen_actions, Y, min_probs,
-    score_actions,
+    model, contextual_bandit, possible_actions, chosen_actions,
+    weighted_rewards, min_probs, score_actions,
 ):
     """Determines whether or not the new model is added to the bandit.
 
@@ -26,10 +26,8 @@ def add_model(
     :type possible_actions:
     :param chosen_actions:
     :type chosen_actions:
-    :param Y:
-    :type Y:
-    :param weights:
-    :type weights:
+    :param weighted_rewards:
+    :type weighted_rewards:
     :param min_probs:
     :type min_probs:
     :param score_actions:
@@ -47,7 +45,7 @@ def add_model(
         model_choices=model_choices,
         possible_actions=possible_actions,
         chosen_actions=chosen_actions,
-        Y=Y,
+        weighted_rewards=weighted_rewards,
     )
     scaled_regret = _get_scaled_regret(
         expected_regret=max(
@@ -66,7 +64,9 @@ def add_model(
         model_choices=model_choices,
         score_actions=score_actions,
     )
-    if variance_coefficients['D'] > 0:
+    print(variance_coefficients)
+    if variance_coefficients['D'] >= 0:
+        print('Adding Model')
         return _rescale_probability(
             contextual_bandit=contextual_bandit + [
                 {
@@ -94,7 +94,9 @@ def _get_model_choices(model, possible_actions, score_actions):
     ]
 
 
-def _get_expected_reward(model_choices, possible_actions, chosen_actions, Y):
+def _get_expected_reward(
+        model_choices, possible_actions, chosen_actions, weighted_rewards,
+):
     """TODO"""
     return numpy.sum(
         reward
@@ -102,7 +104,7 @@ def _get_expected_reward(model_choices, possible_actions, chosen_actions, Y):
             model_choices,
             possible_actions,
             chosen_actions,
-            Y,
+            weighted_rewards,
         )
         if get_chosen_action_index(
             actions=actions,
@@ -141,7 +143,7 @@ def _get_variance_coefficients(
         'S': numpy.average(numpy.power(model_variances, 2)),
         'D': average_variance - (
             scaled_regret +
-            _get_num_actions(possible_actions=possible_actions)
+            2 * _get_num_actions(possible_actions=possible_actions)
         ),
     }
 
